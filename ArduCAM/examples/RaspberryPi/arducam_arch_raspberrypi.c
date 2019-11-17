@@ -122,7 +122,7 @@ uint8_t arducam_i2c_word_write(uint16_t regID, uint8_t regDat)
 	value =  regDat << 8 | reg_L;
 	if(FD != -1)
 	{
-		i2c_smbus_write_word_data(FD, reg_H, value);
+		i2c_smbus_ioctl_data(FD, reg_H, value);
 		arducam_delay_ms(1);
 		return(1);
 	}
@@ -137,10 +137,10 @@ uint8_t arducam_i2c_word_read(uint16_t regID, uint8_t* regDat)
 	reg_L = regID & 0x00ff;
 	if(FD != -1)
 	{
-		r = i2c_smbus_write_byte_data(FD,reg_H,reg_L);
+		r = i2c_smbus_ioctl_data(FD,reg_H,reg_L);
 		if(r<0)
 			return 0;
-		*regDat = i2c_smbus_read_byte(FD);
+		*regDat = i2c_smbus_data(FD);
 		return(1);
 	}
 	return 0;
